@@ -510,8 +510,8 @@ main{ position: relative; z-index: 1; }
   position: fixed;
   top: 0;
   left: 0;
-  width: 232px;
-  height: 232px;
+  width: 285px;
+  height: 285px;
   z-index: 45;
   cursor: pointer;
   image-rendering: pixelated;
@@ -966,7 +966,7 @@ updateScene();
   const beeReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (beeReduceMotion) return; // leave the bee out entirely, per the site's existing motion preference
 
-  const SIZE = 928;
+  const SIZE = 285;
   const H_SPEED = 34;  // px/s baseline horizontal speed — "travels farther" legs
   const V_SPEED = 13;  // px/s baseline vertical speed — slow, smooth bobbing
   const Y_OFFSET = 300;  // offset all bee movement 300px lower
