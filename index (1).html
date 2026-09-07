@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IMPORTANT LINKS</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #ff9d5c 0%, #ffc06e 15%, #ffe08a 30%, #8fc9e0 55%, #4a90c4 100%);
+  }
+
+  /* Shader-style sun glow */
+  body::before {
+    content: "";
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,220,0.95) 0%, rgba(255,220,150,0.5) 35%, rgba(255,200,100,0) 70%);
+    filter: blur(4px);
+    z-index: 0;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    filter: blur(6px) brightness(0.95) saturate(1.15);
+    z-index: 1;
+  }
+
+  /* Distant hazy mountains */
+  .mountains-far {
+    position: absolute;
+    bottom: 30%;
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(to top, #6a90a8 0%, #8fb0c2 100%);
+    clip-path: polygon(0% 100%, 0% 40%, 8% 30%, 16% 45%, 24% 20%, 32% 38%, 40% 15%, 48% 35%,
+      56% 22%, 64% 40%, 72% 18%, 80% 36%, 88% 25%, 96% 42%, 100% 30%, 100% 100%);
+    opacity: 0.7;
+  }
+
+  /* Blocky terrain silhouette */
+  .terrain {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 42%;
+    background: linear-gradient(to top, #1f3b1a 0%, #2f5522 60%, #3d6b2c 100%);
+    clip-path: polygon(
+      0% 100%, 0% 55%, 5% 55%, 5% 45%, 10% 45%, 10% 60%, 15% 60%, 15% 40%,
+      20% 40%, 20% 50%, 28% 50%, 28% 35%, 33% 35%, 33% 48%, 40% 48%, 40% 30%,
+      45% 30%, 45% 42%, 52% 42%, 52% 55%, 58% 55%, 58% 38%, 65% 38%, 65% 48%,
+      70% 48%, 70% 32%, 78% 32%, 78% 45%, 84% 45%, 84% 55%, 90% 55%, 90% 40%,
+      95% 40%, 95% 50%, 100% 50%, 100% 100%
+    );
+  }
+
+  /* Blocky trees */
+  .tree {
+    position: absolute;
+    bottom: 42%;
+    width: 26px;
+    height: 60px;
+  }
+  .tree .trunk {
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    width: 6px;
+    height: 22px;
+    background: #4a2f18;
+  }
+  .tree .leaves {
+    position: absolute;
+    bottom: 18px;
+    width: 26px;
+    height: 40px;
+    background: #2c5c1f;
+    box-shadow: 0 -8px 0 -2px #35701f;
+  }
+
+  .t1 { left: 8%; transform: scale(1.3); }
+  .t2 { left: 22%; transform: scale(0.9); }
+  .t3 { left: 47%; transform: scale(1.1); }
+  .t4 { left: 68%; transform: scale(1.4); }
+  .t5 { left: 85%; transform: scale(0.8); }
+
+  /* Light shafts, shader-like */
+  .light-shaft {
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,220,0.35), rgba(255,255,220,0));
+    transform: skewX(-8deg);
+    z-index: 1;
+  }
+  .ls1 { left: 30%; }
+  .ls2 { left: 55%; }
+  .ls3 { left: 75%; }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 50px 40px;
+    background: rgba(198, 198, 198, 0.55);
+    backdrop-filter: blur(8px);
+    border: 6px solid rgba(55, 55, 55, 0.8);
+    box-shadow:
+      inset 4px 4px 0 rgba(255,255,255,0.3),
+      inset -4px -4px 0 rgba(0,0,0,0.3),
+      0 0 0 4px rgba(139,139,139,0.7),
+      10px 10px 0 rgba(0,0,0,0.3);
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    text-shadow: 2px 2px 0 #2b2b2b;
+    background: #4c8c2e;
+    padding: 20px 45px;
+    border: 4px solid #2c521a;
+    box-shadow:
+      inset 3px 3px 0 #7ec850,
+      inset -3px -3px 0 #2c521a,
+      4px 4px 0 rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+
+  .btn:hover {
+    background: #5aa338;
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(2px);
+    box-shadow:
+      inset 3px 3px 0 #4c8c2e,
+      inset -3px -3px 0 #2c521a,
+      2px 2px 0 rgba(0,0,0,0.4);
+  }
+
+  .tagline {
+    margin-top: 18px;
+    font-size: 12px;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .info-box {
+    display: inline-block;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 2px 2px 0 #2b2b2b;
+    background: #6b6b6b;
+    padding: 20px 45px;
+    border: 4px solid #3a3a3a;
+    box-shadow:
+      inset 3px 3px 0 #8c8c8c,
+      inset -3px -3px 0 #3a3a3a,
+      4px 4px 0 rgba(0,0,0,0.4);
+    margin-top: 20px;
+  }
+
+  .dropdown-wrap {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+  }
+
+  .btn-red {
+    display: inline-block;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    text-shadow: 2px 2px 0 #2b2b2b;
+    background: #c0392b;
+    padding: 20px 45px;
+    border: 4px solid #7b241c;
+    box-shadow:
+      inset 3px 3px 0 #e05a4a,
+      inset -3px -3px 0 #7b241c,
+      4px 4px 0 rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+  }
+
+  .btn-red:hover {
+    background: #d64535;
+    transform: translateY(-2px);
+  }
+
+  .btn-red:active {
+    transform: translateY(2px);
+    box-shadow:
+      inset 3px 3px 0 #c0392b,
+      inset -3px -3px 0 #7b241c,
+      2px 2px 0 rgba(0,0,0,0.4);
+  }
+
+  .yt-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    background: #2b2b2b;
+    border: 3px solid #7b241c;
+    z-index: 10;
+    min-width: 260px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+  }
+
+  .yt-menu.show {
+    display: block;
+  }
+
+  .yt-menu a {
+    display: block;
+    padding: 14px 20px;
+    color: #ffffff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid #3a3a3a;
+  }
+
+  .yt-menu a:last-child {
+    border-bottom: none;
+  }
+
+  .yt-menu a:hover {
+    background: #c0392b;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="mountains-far"></div>
+  <div class="terrain"></div>
+  <div class="tree t1"><div class="leaves"></div><div class="trunk"></div></div>
+  <div class="tree t2"><div class="leaves"></div><div class="trunk"></div></div>
+  <div class="tree t3"><div class="leaves"></div><div class="trunk"></div></div>
+  <div class="tree t4"><div class="leaves"></div><div class="trunk"></div></div>
+  <div class="tree t5"><div class="leaves"></div><div class="trunk"></div></div>
+</div>
+
+<div class="light-shaft ls1"></div>
+<div class="light-shaft ls2"></div>
+<div class="light-shaft ls3"></div>
+
+<div class="container">
+  <h1>IMPORTANT LINKS</h1>
+
+  <a class="btn" href="https://discord.gg/bw5SdGerK" target="_blank">DISCORD</a>
+
+  <div class="tagline">BC'S BEST PUBLIC MINECRAFT SERVER</div>
+
+  <div class="info-box">THE IP WILL BE IN THE DISCORD</div>
+
+  <div class="dropdown-wrap">
+    <button class="btn-red" onclick="document.getElementById('ytMenu').classList.toggle('show')">SUPPORT OUR YOUTUBE CHANNELS</button>
+    <div class="yt-menu" id="ytMenu">
+      <a href="https://www.youtube.com/@Awhail7" target="_blank">Awhail7</a>
+      <a href="https://www.youtube.com/@MoomooKing531" target="_blank">MoomooKing531</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('click', function(e) {
+    const wrap = document.querySelector('.dropdown-wrap');
+    if (!wrap.contains(e.target)) {
+      document.getElementById('ytMenu').classList.remove('show');
+    }
+  });
+</script>
+
+</body>
+</html>
