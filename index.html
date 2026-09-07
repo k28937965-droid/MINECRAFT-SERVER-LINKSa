@@ -501,6 +501,126 @@ main{ position: relative; z-index: 1; }
   .btn-row{ flex-direction: column; width: 100%; }
   .btn-row .btn{ justify-content: center; }
 }
+
+/* =====================================================================
+   BEE — spawns beside "Minecraft" in the intro heading, then glides
+   around the whole page at random, bouncing off the edges.
+   ===================================================================== */
+.bee{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 232px;
+  height: 232px;
+  z-index: 45;
+  cursor: pointer;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+  perspective: 400px;
+  will-change: left, top;
+}
+.bee.bee-visible{ opacity: 1; }
+
+.bee.bee-face-right{ transform: scaleX(1); }
+.bee.bee-face-left{ transform: scaleX(-1); }
+
+.bee.bee-flip-right{
+  animation: beeFlipRight .4s ease forwards;
+}
+.bee.bee-flip-left{
+  animation: beeFlipLeft .4s ease forwards;
+}
+@keyframes beeFlipRight{
+  0%{   transform: scaleX(-1) rotateY(0deg); }
+  40%{  transform: scaleX(-1) rotateY(70deg); }
+  50%{  transform: scaleX(-1) rotateY(90deg); }
+  51%{  transform: scaleX(1)  rotateY(90deg); }
+  60%{  transform: scaleX(1)  rotateY(70deg); }
+  100%{ transform: scaleX(1)  rotateY(0deg); }
+}
+@keyframes beeFlipLeft{
+  0%{   transform: scaleX(1)  rotateY(0deg); }
+  40%{  transform: scaleX(1)  rotateY(-70deg); }
+  50%{  transform: scaleX(1)  rotateY(-90deg); }
+  51%{  transform: scaleX(-1) rotateY(-90deg); }
+  60%{  transform: scaleX(-1) rotateY(-70deg); }
+  100%{ transform: scaleX(-1) rotateY(0deg); }
+}
+.bee.bee-shake{
+  animation: beeShake .42s ease;
+}
+@keyframes beeShake{
+  0%, 100%{ transform: translate(0,0) rotate(0deg); }
+  15%{ transform: translate(-5px,-3px) rotate(-10deg); }
+  30%{ transform: translate(5px,2px) rotate(9deg); }
+  45%{ transform: translate(-4px,2px) rotate(-7deg); }
+  60%{ transform: translate(4px,-2px) rotate(7deg); }
+  75%{ transform: translate(-2px,1px) rotate(-4deg); }
+  90%{ transform: translate(2px,0) rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce){
+  .bee{ display: none; }
+}
+
+/* ---- Click counter ---- */
+.bee-counter{
+  position: fixed;
+  top: 1.1rem;
+  left: 1.3rem;
+  z-index: 60;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  line-height: 1;
+  color: #ff9a2e;
+  text-shadow: 0 0 8px rgba(255,154,46,.65), 0 0 22px rgba(255,154,46,.35);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .4s ease, transform .4s ease;
+  pointer-events: none;
+  user-select: none;
+}
+.bee-counter.bee-counter-show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================================================
+   FIREFLIES — appear when bee fades out, glow effect, random movement
+   ===================================================================== */
+.fireflies-container{
+  position: fixed;
+  inset: 0;
+  z-index: 44;
+  pointer-events: none;
+}
+
+.firefly{
+  position: fixed;
+  width: 12px;
+  height: 6px;
+  opacity: 0;
+  will-change: left, top, opacity;
+  pointer-events: none;
+  transition: opacity 1s ease;
+  background: linear-gradient(90deg, #000 0%, #000 50%, #ffeb3b 50%, #ffeb3b 100%);
+  filter: drop-shadow(0 0 8px #ffeb3b) drop-shadow(0 0 16px #ffeb3b) drop-shadow(0 0 24px rgba(255,235,59,.6));
+}
+
+.firefly.firefly-visible{
+  animation: fireflyFlicker 2s ease-in-out infinite;
+}
+
+@keyframes fireflyFlicker{
+  0%, 100%{ opacity: 0.3; }
+  50%{ opacity: 1; }
+}
 </style>
 </head>
 <body>
@@ -528,6 +648,10 @@ main{ position: relative; z-index: 1; }
 <div class="vignette"></div>
 <div class="grain"></div>
 
+<img class="bee" id="bee" src="data:image/png;base64,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" alt="" aria-hidden="true" draggable="false">
+<div class="bee-counter" id="beeCounter">0</div>
+<div class="fireflies-container" id="firefliesContainer"></div>
+
 <nav class="dot-nav" aria-label="Section navigation">
   <span class="rail" aria-hidden="true"></span>
   <button class="dot" data-target="intro" data-label="Intro" aria-label="Go to intro"></button>
@@ -541,7 +665,7 @@ main{ position: relative; z-index: 1; }
 
   <section class="scene scene-intro" id="intro" data-theme="0">
     <div class="scene-content in-view">
-      <h1 class="reveal-item">BC Minecraft Server</h1>
+      <h1 class="reveal-item">BC <span id="mcWord">Minecraft</span> <span id="serverWord"></span>Server</span></h1>
       <p class="lede reveal-item">Let's go on a journey through BC's first Minecraft server.</p>
       <p class="sub reveal-item">Build your world. Meet your community. Create something unforgettable.</p>
       <p class="tags reveal-item">Build · Explore · Compete · Connect</p>
@@ -559,7 +683,7 @@ main{ position: relative; z-index: 1; }
       <p class="desc reveal-item">Join the Discord to meet other players, see announcements, take part in events, and stay connected with the server.</p>
       <a class="btn reveal-item" id="discordBtn" href="#" target="_blank" rel="noopener">Join Discord →</a>
       <div class="stat reveal-item" id="communityStat">
-        <span class="stat-number" id="communityNumber">12,000+</span>
+        <span class="stat-number" id="communityNumber">Active</span>
         <span class="stat-label">Community members</span>
       </div>
     </div>
@@ -613,7 +737,7 @@ const CONFIG = {
   discordUrl: "https://discord.gg/edB7VGJyMR",
   youtubeUrl: "https://youtube.com/@your-channel",
   serverIp: "154.5.218.72",
-  communityCount: "12,000+",
+  communityCount: "Active",
   showCommunityCount: true,
 };
 
@@ -825,7 +949,341 @@ function onScroll(){
 window.addEventListener("scroll", onScroll, { passive: true });
 window.addEventListener("resize", onScroll);
 updateScene();
-</script>
 
-</body>
-</html>
+/* =====================================================================
+   BEE — spawns beside "Minecraft" in the intro heading, then gently
+   glides around the whole page at random, bouncing off the viewport
+   edges, flipping like a turned page whenever it changes direction.
+   =====================================================================
+*/
+(function(){
+  const bee = document.getElementById("bee");
+  const counterEl = document.getElementById("beeCounter");
+  const ipSection = document.getElementById("ip");
+  const mcWord = document.getElementById("mcWord");
+  if (!bee) return;
+
+  const beeReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (beeReduceMotion) return; // leave the bee out entirely, per the site's existing motion preference
+
+  const SIZE = 928;
+  const H_SPEED = 34;  // px/s baseline horizontal speed — "travels farther" legs
+  const V_SPEED = 13;  // px/s baseline vertical speed — slow, smooth bobbing
+  const Y_OFFSET = 300;  // offset all bee movement 300px lower
+  const X_OFFSET = 300;  // offset all bee movement 300px to the right
+
+  let x = 0, y = 0;
+  let vx = 0, vy = 0;           // eased, actual velocity
+  let targetVx = 0, targetVy = 0;
+  let spawned = false;
+  let lastTime = null;
+  let boostUntil = 0;           // 2x speed window after a click
+
+  /* ---- facing (left/right) + directional paper-flip ---- */
+  let facing = null; // 'left' | 'right'
+
+  function applyFacingClass(dir){
+    bee.classList.remove(dir === "left" ? "bee-face-left" : "bee-face-right");
+    bee.classList.add(dir === "left" ? "bee-face-left" : "bee-face-right");
+  }
+
+  function setFacingImmediate(dir){
+    facing = dir;
+    applyFacingClass(dir);
+  }
+
+  function updateFacing(newFacing){
+    if (newFacing === facing) return;
+    const oldFacing = facing;
+    facing = newFacing;
+    bee.classList.remove("bee-flip-left", "bee-flip-right");
+    void bee.offsetWidth; // reflow so the animation can restart mid-flip
+    
+    // Determine which flip animation based on the direction change
+    // If going from left to right, use beeFlipRight animation
+    // If going from right to left, use beeFlipLeft animation
+    if (newFacing === "right" && oldFacing === "left") {
+      bee.classList.add("bee-flip-right");
+    } else if (newFacing === "left" && oldFacing === "right") {
+      bee.classList.add("bee-flip-left");
+    }
+  }
+
+  let hDir = 1;
+  let hSpeed = H_SPEED;
+  let hLegEndTime = 0;
+  let hClusterDir = 1;      // current cluster direction (stays the same for multiple legs)
+  let hLegsInCluster = 0;   // how many legs in current cluster
+  let hClusterSize = 0;     // how many legs this cluster should have
+
+  function pickLegSeconds(){
+    const r = Math.random();
+    if (r < 0.22) return 0.7 + Math.random() * 0.9;   // short fly
+    if (r < 0.8)  return 1.6 + Math.random() * 2.0;    // typical fly
+    return 3.6 + Math.random() * 3.2;                  // long fly, travels farther
+  }
+
+  function startNewCluster(){
+    // pick a random direction for this cluster and how many legs it should have
+    hClusterDir = Math.random() < 0.5 ? -1 : 1;
+    hClusterSize = 2 + Math.floor(Math.random() * 4);  // 2-5 legs per cluster
+    hLegsInCluster = 0;
+  }
+
+  function startHorizontalLeg(dir, now){
+    hDir = dir;
+    hSpeed = H_SPEED * (0.75 + Math.random() * 0.6);
+    hLegEndTime = now + pickLegSeconds() * 1000;
+    targetVx = hDir * hSpeed;
+    updateFacing(dir > 0 ? "left" : "right");
+  }
+
+  /* ---- vertical: up/down segments following varied ratio patterns ----
+     mostly 1:1 (up,down), sometimes 2:1 one way or the other, sometimes
+     a stronger 1:3 either way — so it drifts net-up or net-down at times
+     but is usually an even bob. -1 = up, 1 = down. */
+  let vQueue = [];
+  let vSegIndex = 0;
+  let vDir = -1;
+  let vSpeed = V_SPEED;
+  let vSegEndTime = 0;
+
+  function generateVerticalPattern(){
+    const r = Math.random();
+    if (r < 0.35) return [-1, 1];             // up, down — balanced
+    if (r < 0.42) return [-1, -1, 1];         // up, up, down — more up
+    if (r < 0.49) return [1, 1, -1];          // down, down, up — more down
+    if (r < 0.56) return [-1, 1, 1, 1];       // up, down, down, down — drift down
+    if (r < 0.63) return [1, -1, -1, -1];     // down, up, up, up — drift up
+    if (r < 0.70) return [-1, -1, -1, 1];     // up, up, up, down — more up
+    if (r < 0.77) return [1, 1, 1, -1];       // down, down, down, up — more down
+    if (r < 0.84) return [-1, -1, 1, 1];      // up, up, down, down — net balanced
+    if (r < 0.91) return [1, 1, -1, -1];      // down, down, up, up — net balanced
+    return [-1, 1];                            // default: balanced
+  }
+
+  function nextVerticalSegment(now){
+    if (vSegIndex >= vQueue.length){
+      vQueue = generateVerticalPattern();
+      vSegIndex = 0;
+    }
+    vDir = vQueue[vSegIndex++];
+    vSpeed = V_SPEED * (0.8 + Math.random() * 0.5);
+    vSegEndTime = now + (0.9 + Math.random() * 1.3) * 1000;
+    targetVy = vDir * vSpeed;
+  }
+
+  function placeBee(){
+    bee.style.left = (x + X_OFFSET) + "px";
+    bee.style.top = (y + Y_OFFSET) + "px";
+  }
+
+  function spawnBesideMinecraft(){
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    let startX = vw / 2, startY = vh * 0.5 - Y_OFFSET;
+    const serverWord = document.getElementById("serverWord");
+    if (serverWord) {
+      const r = serverWord.getBoundingClientRect();
+      // only trust this rect if the word is actually on-screen right now
+      if (r.width > 0 && r.top < vh && r.bottom > 0) {
+        startX = r.right + 14;
+        startY = r.top + r.height / 2 - SIZE / 2 - Y_OFFSET;
+      }
+    }
+    x = Math.min(Math.max(startX, 4), vw - SIZE - 4);
+    y = Math.min(Math.max(startY, 4), vh - SIZE - 4);
+    placeBee();
+
+    const now = performance.now();
+    const initialDir = Math.random() < 0.5 ? -1 : 1;
+    setFacingImmediate(initialDir > 0 ? "left" : "right");
+    startNewCluster();
+    hClusterDir = initialDir;
+    hLegsInCluster = 0;
+    startHorizontalLeg(initialDir, now);
+    nextVerticalSegment(now);
+
+    spawned = true;
+    requestAnimationFrame(updateBeeVisibility);
+  }
+
+  function step(now){
+    if (lastTime === null) lastTime = now;
+    const dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const maxX = vw - SIZE;
+    const maxY = vh - SIZE;
+
+    // ease actual velocity toward the current leg/segment target — keeps
+    // every transition smooth, slow and gentle instead of snapping
+    const smoothing = 1 - Math.exp(-dt / 0.45);
+    vx += (targetVx - vx) * smoothing;
+    vy += (targetVy - vy) * smoothing;
+
+    const boostActive = now < boostUntil;
+    const mult = boostActive ? 10 : 1;
+
+    x += vx * mult * dt;
+    y += vy * mult * dt;
+
+    if (x <= 0){ x = 0; if (hDir < 0) { startNewCluster(); hClusterDir = 1; hLegsInCluster = 0; startHorizontalLeg(1, now); } }
+    else if (x >= maxX){ x = maxX; if (hDir > 0) { startNewCluster(); hClusterDir = -1; hLegsInCluster = 0; startHorizontalLeg(-1, now); } }
+
+    if (y <= 0){
+      y = 0;
+      if (vDir < 0){ vDir = 1; targetVy = vDir * vSpeed; vSegEndTime = now + (0.9 + Math.random() * 1.3) * 1000; }
+    } else if (y >= maxY){
+      y = maxY;
+      if (vDir > 0){ vDir = -1; targetVy = vDir * vSpeed; vSegEndTime = now + (0.9 + Math.random() * 1.3) * 1000; }
+    }
+
+    if (now >= hLegEndTime){
+      hLegsInCluster++;
+      
+      if (hLegsInCluster >= hClusterSize){
+        // cluster is done, start a new cluster in opposite direction
+        startNewCluster();
+      }
+      
+      startHorizontalLeg(hClusterDir, now);
+    }
+
+    if (now >= vSegEndTime){
+      nextVerticalSegment(now);
+    }
+
+    placeBee();
+    requestAnimationFrame(step);
+  }
+
+  function startFlying(){
+    if (!spawned) spawnBesideMinecraft();
+    requestAnimationFrame(step);
+    
+    // Check facing direction every 3 seconds and fix if needed
+    setInterval(() => {
+      if (!spawned) return;
+      
+      // Determine what direction the bee should be facing based on horizontal velocity
+      const expectedFacing = hDir > 0 ? "right" : "left";
+      
+      // If facing doesn't match the direction, fix it
+      if (facing !== expectedFacing) {
+        updateFacing(expectedFacing);
+      }
+    }, 3000);
+  }
+
+  if (document.readyState === "complete") {
+    startFlying();
+  } else {
+    window.addEventListener("load", startFlying, { once: true });
+  }
+
+  // keep the bee on-screen if the window is resized dramatically
+  window.addEventListener("resize", () => {
+    if (!spawned) return;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    x = Math.min(x, vw - SIZE);
+    y = Math.min(y, vh - SIZE);
+  });
+
+  /* ---- fade out once you've scrolled past the Discord section, fade back
+     in above it ---- */
+  function updateBeeVisibility(){
+    const discordSection = document.getElementById("discord");
+    if (!discordSection || !spawned) return;
+    const rect = discordSection.getBoundingClientRect();
+    const pastIt = rect.bottom < 0;
+    bee.classList.toggle("bee-visible", !pastIt);
+  }
+  window.addEventListener("scroll", updateBeeVisibility, { passive: true });
+  window.addEventListener("resize", updateBeeVisibility);
+  updateBeeVisibility();
+
+  /* ---- click counter ---- */
+  let count = 0;
+  let hideTimer = null;
+  let resetTimer = null;
+
+  function renderCounter(){
+    counterEl.textContent = String(count);
+  }
+
+  function showCounter(){
+    counterEl.classList.add("bee-counter-show");
+  }
+
+  function hideCounter(){
+    counterEl.classList.remove("bee-counter-show");
+  }
+
+  function clearHideTimer(){
+    if (hideTimer){ clearTimeout(hideTimer); hideTimer = null; }
+  }
+
+  function clearResetTimer(){
+    if (resetTimer){ clearTimeout(resetTimer); resetTimer = null; }
+  }
+
+  function startResetTimer(){
+    clearResetTimer();
+    resetTimer = setTimeout(() => {
+      count = 0;
+      renderCounter();
+      hideCounter();
+      resetTimer = null;
+    }, 5000);
+  }
+
+  bee.addEventListener("click", (e) => {
+    e.stopPropagation();
+    clearHideTimer();
+    count += 1;
+    renderCounter();
+    showCounter();
+    startResetTimer();
+    bee.classList.remove("bee-shake");
+    void bee.offsetWidth;
+    bee.classList.add("bee-shake"); // shake, but keep flying — movement never stops
+    boostUntil = performance.now() + 1000; // 10x speed for 1 second
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target === bee) return;
+    if (count === 0 && hideTimer === null && !counterEl.classList.contains("bee-counter-show")) return;
+    count = 0;
+    renderCounter();
+    showCounter();
+    clearResetTimer();
+    clearHideTimer();
+    hideTimer = setTimeout(() => {
+      hideCounter();
+      hideTimer = null;
+    }, 3000);
+  });
+})();
+
+/* =====================================================================
+   FIREFLIES — spawn and animate when bee fades out
+   ===================================================================== */
+(function(){
+  const firefliesContainer = document.getElementById("firefliesContainer");
+  const FIREFLY_COUNT = 15;
+  const fireflies = [];
+
+  class Firefly {
+    constructor() {
+      this.el = document.createElement("div");
+      this.el.className = "firefly";
+      firefliesContainer.appendChild(this.el);
+      
+      this.x = Math.random() * window.innerWidth;
+      this.y = Math.random() * window.innerHeight;
+      this.vx = (Math.random() - 0.5) * 4;  // 5x slower velocity
+      this.vy = (Math.random() - 0.5) * 4;
+      this.visib... (3 KB left)
